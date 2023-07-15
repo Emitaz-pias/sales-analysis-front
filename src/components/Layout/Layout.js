@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom';
 
 const Layout = () => {
     return (
-        <Row>
+        <Row className='w-100'>
             <Col md={2} lg={3}>
             <Mysidebar/>
             </Col>
