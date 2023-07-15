@@ -16,6 +16,7 @@ const AddNewOutlet = () => {
             <br/>
 
       <input type="number" placeholder="GP" {...register("GP", {required: true})} />
+      <br/>
 
       <input type="submit" />
     </form> 
