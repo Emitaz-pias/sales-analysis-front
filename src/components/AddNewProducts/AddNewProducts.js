@@ -1,11 +1,20 @@
-import React, { useState } from 'react';
+import React ,{ useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 
 
 const AddNewProducts = () => {
+  const [inputValue, setInputValue] = useState("");
+  const count = useRef(0);
+
+  useEffect(() => {
+    count.current = count.current + 1;
+  });
   const { register, handleSubmit, formState: { errors } } = useForm();
   const onSubmit = data => console.log(data);
   console.log(errors);
+  const handleKeyDown = (e)=>{
+    setInputValue(e.target.value)
+  }
   
     // const initialProducts = [
     //     { name: 'White Bread 500gm', quantity: '' },
@@ -38,9 +47,13 @@ const AddNewProducts = () => {
     //   };
     return (
         <div>
-          <form onSubmit={handleSubmit(onSubmit)}>
-      <input type="text" placeholder="Product Name" {...register("Product Name", {required: true})} />
+          <form>
+      <input
+         value={inputValue}
+        onKeyDown={(e)=>handleKeyDown(e)} 
+        type="text" placeholder="Product Name"/>
       <br/>
+      <h1>Render Count: {count.current}</h1>
       <input type="text" placeholder="Category" {...register("Category", {required: true})} />
       <br/>
       <input  type="text" placeholder="MRP" {...register("MRP", {required: true})} />
