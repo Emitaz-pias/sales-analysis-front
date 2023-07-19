@@ -1,86 +1,84 @@
-import React ,{ useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
+import { Form, Button, Row, Col } from 'react-bootstrap';
 
 
 const AddNewProducts = () => {
-  const [inputValue, setInputValue] = useState("");
-  const count = useRef(0);
+  const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
-  useEffect(() => {
-    count.current = count.current + 1;
-  });
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  const onSubmit = data => console.log(data);
-  console.log(errors);
-  const handleKeyDown = (e)=>{
-    setInputValue(e.target.value)
+  const handleKeyPress = (e, index) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (index < 2) {
+        const nextInput = document.getElementById(`input-${index + 1}`);
+        nextInput && nextInput.focus();
+      }
+    }
   }
-  
-    // const initialProducts = [
-    //     { name: 'White Bread 500gm', quantity: '' },
-    //     { name: 'White Bread 300gm', quantity: '' },
-    //     { name: 'Milk Bread 300gm', quantity: '' },
-    //     { name: 'Multigrain Bread 300gm', quantity: '' },
-    //   ];
-    
-    //   const [products, setProducts] = useState(initialProducts);
-    
-    //   const handleChangeQuantity = (index, event) => {
-    //     const newProducts = [...products];
-    //     newProducts[index].quantity = event.target.value;
-    //     setProducts(newProducts);
-    //   };
-    
-    //   const handleKeyDown = (event, index) => {
-    //     if (event.key === 'Enter') {
-    //       event.preventDefault();
-    //       if (index < products.length - 1) {
-    //         const nextInput = document.getElementById(`quantity-${index + 1}`);
-    //         nextInput.focus();
-    //       }
-    //     }
-    //   };    
-    //   const handleSubmit = (event) => {
-    //     event.preventDefault();
-    //     console.log('Form submitted:', products);
-    //     // Perform any other desired actions with the submitted data
-    //   };
-    return (
-        <div>
-          <form>
-      <input
-         value={inputValue}
-        onKeyDown={(e)=>handleKeyDown(e)} 
-        type="text" placeholder="Product Name"/>
-      <br/>
-      <h1>Render Count: {count.current}</h1>
-      <input type="text" placeholder="Category" {...register("Category", {required: true})} />
-      <br/>
-      <input  type="text" placeholder="MRP" {...register("MRP", {required: true})} />
-      <br/>
-      <input  type="number" placeholder="Unit" {...register("Unit", {required: true})} />
-      <br/>
-      <input type="submit" />
-    </form>
-        {/* <form onSubmit={handleSubmit}>
-          {products.map((product, index) => (
-            <div key={index}>
-              <label>
-                {product.name}:
-                <input
-                  id={`quantity-${index}`}
-                  type="text"
-                  value={product.quantity}
-                  onChange={(event) => handleChangeQuantity(index, event)}
-                  onKeyDown={(event) => handleKeyDown(event, index)}
-                />
-              </label>
-            </div>
-          ))}
-            <button onSubmit={handleSubmit} type="submit">Submit</button>
-        </form> */}
-      </div>
-    );
-};
+
+  const onSubmit = (data) => {
+    reset();
+  };
+
+  return (
+    <section>
+       <Row>
+        <Col lg={6} md={6} xs={6}>
+          <h1 className="text-center">Add New Products Here!</h1>
+        </Col>
+      </Row>
+      <Row>
+        <Col lg={6} md={6} xs={6}>
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <Form.Group className="mb-3">
+              <Form.Label>Enter the product name *</Form.Label>
+              <Form.Control
+                id="input-0"
+                onKeyDown={(e) => handleKeyPress(e, 0)}
+                type="text"
+                placeholder="product Name"
+                {...register('productName', { required: true })}
+              />
+              {errors.companyName && (
+                <p>Please Enter the product name *</p>
+              )}
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Enter category *</Form.Label>
+              <Form.Control
+                id="input-1"
+                onKeyDown={(e) => handleKeyPress(e, 1)}
+                type="text"
+                placeholder="category Name"
+                {...register('category', { required: true })}
+              />
+              {errors.outletName && (
+                <p>Please Enter category</p>
+              )}
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>MRP</Form.Label>
+              <Form.Control
+                id="input-2"
+                onKeyDown={(e) => handleKeyPress(e, 2)}
+                type="number"
+                placeholder="MRP"
+                {...register('price', { required: true })}
+              />
+              {errors.gp && (
+                <p>Please Enter MRP</p>
+              )}
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Button type="submit">Submit</Button>
+            </Form.Group>
+          </Form>
+        </Col>
+      </Row>
+     
+    </section>
+  );
+}
+
 
 export default AddNewProducts;

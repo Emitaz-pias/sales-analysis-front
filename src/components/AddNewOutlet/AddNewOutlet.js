@@ -12,8 +12,25 @@ const AddNewOutlet = () => {
         const nextInput = document.getElementById(`input-${index + 1}`);
         nextInput && nextInput.focus();
       }
-    }
-  };
+    }}
+     
+// else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+//   e.preventDefault();
+//   if (index > 0) {
+//     const nextInput = document.getElementById(`input-${index + 1}`);
+//     console.log('nextIp',nextInput)
+//     nextInput && nextInput.focus();
+//   }
+// } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+//   e.preventDefault();
+//   if (index < 2) {
+//     const nextInput = document.getElementById(`input-${index - 1}`);
+//     nextInput && nextInput.focus();
+//     console.log('nextIp',nextInput)
+
+//   }
+// }
+//   };
 
   const onSubmit = (data) => {
     console.log(data, 'onSubmit called');
@@ -61,7 +78,7 @@ const AddNewOutlet = () => {
               <Form.Control
                 id="input-2"
                 onKeyDown={(e) => handleKeyPress(e, 2)}
-                type="text"
+                type="number"
                 placeholder="GP"
                 {...register('gp', { required: true })}
               />
