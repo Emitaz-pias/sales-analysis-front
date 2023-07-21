@@ -20,7 +20,7 @@ const Mysidebar = () => {
             <MenuItem component={<Link to="/addNewProducts" />}> Add New Products</MenuItem>
             <MenuItem component={<Link to="/addNewExpiry" />}> Add New Expiray</MenuItem>
             <MenuItem component={<Link to="/addNewDelivery" />}> Add New Delivery</MenuItem>
-            <MenuItem component={<Link to="/showExpiry" />}> Show Expiray n Sales</MenuItem>
+            <MenuItem component={<Link to="/showExpiry" />}> Show Calculation</MenuItem>
             <MenuItem component={<Link to="/showProjection" />}> Show Projection</MenuItem>
 
             

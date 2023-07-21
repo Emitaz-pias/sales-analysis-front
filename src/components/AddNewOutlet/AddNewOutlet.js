@@ -1,4 +1,4 @@
-import React  from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 
@@ -8,13 +8,29 @@ const AddNewOutlet = () => {
   const handleKeyPress = (e, index) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      if (index ===2) {
-       return window.alert('Confirm Submit New Outlet? Click Submit');
-      } else {
-        handleSubmit(onSubmit)();
+      if (index < 2) {
+        const nextInput = document.getElementById(`input-${index + 1}`);
+        nextInput && nextInput.focus();
       }
-    }
-  };
+    }}
+     
+// else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+//   e.preventDefault();
+//   if (index > 0) {
+//     const nextInput = document.getElementById(`input-${index + 1}`);
+//     console.log('nextIp',nextInput)
+//     nextInput && nextInput.focus();
+//   }
+// } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+//   e.preventDefault();
+//   if (index < 2) {
+//     const nextInput = document.getElementById(`input-${index - 1}`);
+//     nextInput && nextInput.focus();
+//     console.log('nextIp',nextInput)
+
+//   }
+// }
+//   };
 
   const onSubmit = (data) => {
     console.log(data, 'onSubmit called');
@@ -34,6 +50,7 @@ const AddNewOutlet = () => {
             <Form.Group className="mb-3">
               <Form.Label>Enter the company name *</Form.Label>
               <Form.Control
+                id="input-0"
                 onKeyDown={(e) => handleKeyPress(e, 0)}
                 type="text"
                 placeholder="Company Name"
@@ -46,7 +63,7 @@ const AddNewOutlet = () => {
             <Form.Group className="mb-3">
               <Form.Label>Enter the outlet name *</Form.Label>
               <Form.Control
-
+                id="input-1"
                 onKeyDown={(e) => handleKeyPress(e, 1)}
                 type="text"
                 placeholder="Outlet Name"
@@ -59,7 +76,7 @@ const AddNewOutlet = () => {
             <Form.Group className="mb-3">
               <Form.Label>Enter the GP%</Form.Label>
               <Form.Control
-
+                id="input-2"
                 onKeyDown={(e) => handleKeyPress(e, 2)}
                 type="number"
                 placeholder="GP"
