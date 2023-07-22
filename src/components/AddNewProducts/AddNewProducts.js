@@ -6,7 +6,6 @@ import axios from "axios";
 
 const AddNewProducts = () => {
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
-
   const handleKeyPress = (e, index) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -101,7 +100,7 @@ const AddNewProducts = () => {
           </Form>
         </Col>
       </Row>
-     
+      
     </section>
   );
 }

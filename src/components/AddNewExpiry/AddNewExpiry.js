@@ -1,7 +1,9 @@
 import axios from 'axios';
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Row, Form, Button, Dropdown, } from 'react-bootstrap';
+import { Row, Form, Col } from 'react-bootstrap';
+import { useForm } from 'react-hook-form';
+
 
 
 const AddNewExpiry = () => {
@@ -11,7 +13,6 @@ const AddNewExpiry = () => {
     const [productSubmited, setProductSubmited] = useState(false)
 
     // load all the outlets and all the products
-    console.log(allOutlets, allProducts)
     useEffect(() => {
         axios
             .get(" http://localhost:4040/getAllOutlets")
@@ -35,14 +36,6 @@ const AddNewExpiry = () => {
             });
 
     }, [])
-
-
-    //select the outlet
-    const selectOutlet = (outletName) => {
-
-    }
-
-    console.log(selectedOutlet, 'is selected now')
     //upload the expiry
     const onSubmit = (data) => {
         // axios
@@ -64,7 +57,12 @@ const AddNewExpiry = () => {
         setSelectedOutlet(event.target.value)
     }
     return (
-        <sectin>
+        <section>
+            <Row>
+            <Col md={{span:8,offset:2}}>
+                <h2 className='text-secondary'>Add New Expriy From Here!</h2>
+            </Col>
+            </Row>
             <Row className='mt-5'>
                 <Form onChange={handleOutletSelect}>
                     <Form.Select>
@@ -75,7 +73,17 @@ const AddNewExpiry = () => {
                     </Form.Select>
                 </Form>
             </Row>
-        </sectin>
+            <Row styles={{border:'dotted'}}>
+                <Col md={{offset:1,span:10}}>
+                  {
+                    allProducts.map((product,index)=>(
+                        <p>{product.productName}</p>
+                    ))
+                  }
+                </Col>
+      </Row>
+     
+        </section>
 
     );
 };

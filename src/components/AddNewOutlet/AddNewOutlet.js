@@ -35,23 +35,23 @@ const AddNewOutlet = () => {
 // }
 //   };
 
-  const onSubmit = (data) => {
-    axios
-    .post(" http://localhost:4040/postOutlet", data)
-    .then((response) => {
-      if(response.data===true){
-        setProductSubmited(true)
-        reset();
-      }
-    })
-    .catch((error) => {
-      console.error("Error submitting data:", error);
-      // Handle the error here
-    });
-    console.log(data, 'onSubmit called');
-   
-  };
-
+    const onSubmit = (data) => {
+      axios
+      .post(" http://localhost:4040/postOutlet", data)
+      .then((response) => {
+        if(response.data===true){
+          setProductSubmited(true)
+          reset();
+        }
+      })
+      .catch((error) => {
+        console.error("Error submitting data:", error);
+        // Handle the error here
+      });
+      console.log(data, 'onSubmit called');
+    
+    };
+///
   return (
     <section>
       <Row>
