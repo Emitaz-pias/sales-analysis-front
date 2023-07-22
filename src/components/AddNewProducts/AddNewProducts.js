@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Form, Button, Row, Col } from 'react-bootstrap';
+import axios from "axios";
 
 
 const AddNewProducts = () => {
@@ -17,6 +18,18 @@ const AddNewProducts = () => {
   }
 
   const onSubmit = (data) => {
+     axios
+    .post(" http://localhost:4040/postNewProduct", data)
+    .then((response) => {
+      console.log(response.data); // Response from the server
+      // Additional logic or handling of the response data here
+    })
+    .catch((error) => {
+      console.error("Error submitting data:", error);
+      // Handle the error here
+    });
+    console.log(data, 'onSubmit called');
+   
     reset();
   };
 
