@@ -10,7 +10,7 @@ const AddNewProducts = () => {
   const handleKeyPress = (e, index) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      if (index < 2) {
+      if (index < 3) {
         const nextInput = document.getElementById(`input-${index + 1}`);
         nextInput && nextInput.focus();
       }
@@ -21,16 +21,16 @@ const AddNewProducts = () => {
      axios
     .post(" http://localhost:4040/postNewProduct", data)
     .then((response) => {
-      console.log(response.data); // Response from the server
-      // Additional logic or handling of the response data here
+      if(response.data===true){
+        reset();
+      }
     })
     .catch((error) => {
       console.error("Error submitting data:", error);
       // Handle the error here
     });
     console.log(data, 'onSubmit called');
-   
-    reset();
+
   };
 
   return (
@@ -43,11 +43,24 @@ const AddNewProducts = () => {
       <Row>
         <Col lg={6} md={6} xs={6}>
           <Form onSubmit={handleSubmit(onSubmit)}>
-            <Form.Group className="mb-3">
-              <Form.Label>Enter the product name *</Form.Label>
+          <Form.Group className="mb-3">
+              <Form.Label>Enter the product code *</Form.Label>
               <Form.Control
                 id="input-0"
                 onKeyDown={(e) => handleKeyPress(e, 0)}
+                type="number"
+                placeholder="product Code"
+                {...register('productCode', { required: true })}
+              />
+              {errors.companyName && (
+                <p>Please Enter the product Code *</p>
+              )}
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Enter the product name *</Form.Label>
+              <Form.Control
+                id="input-1"
+                onKeyDown={(e) => handleKeyPress(e, 1)}
                 type="text"
                 placeholder="product Name"
                 {...register('productName', { required: true })}
@@ -59,8 +72,8 @@ const AddNewProducts = () => {
             <Form.Group className="mb-3">
               <Form.Label>Enter category *</Form.Label>
               <Form.Control
-                id="input-1"
-                onKeyDown={(e) => handleKeyPress(e, 1)}
+                id="input-2"
+                onKeyDown={(e) => handleKeyPress(e, 2)}
                 type="text"
                 placeholder="category Name"
                 {...register('category', { required: true })}
@@ -72,8 +85,8 @@ const AddNewProducts = () => {
             <Form.Group className="mb-3">
               <Form.Label>MRP</Form.Label>
               <Form.Control
-                id="input-2"
-                onKeyDown={(e) => handleKeyPress(e, 2)}
+                id="input-3"
+                onKeyDown={(e) => handleKeyPress(e, 3)}
                 type="number"
                 placeholder="MRP"
                 {...register('price', { required: true })}

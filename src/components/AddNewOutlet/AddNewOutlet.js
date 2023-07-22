@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import axios from "axios";
+import axios, { formToJSON } from "axios";
 
 
 const AddNewOutlet = () => {
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
+  const [productSubmited,setProductSubmited] = useState(false)
 
   const handleKeyPress = (e, index) => {
     if (e.key === 'Enter') {
@@ -38,8 +39,10 @@ const AddNewOutlet = () => {
     axios
     .post(" http://localhost:4040/postOutlet", data)
     .then((response) => {
-      console.log(response.data); // Response from the server
-      // Additional logic or handling of the response data here
+      if(response.data===true){
+        setProductSubmited(true)
+        reset();
+      }
     })
     .catch((error) => {
       console.error("Error submitting data:", error);
@@ -56,7 +59,13 @@ const AddNewOutlet = () => {
           <h1 className="text-center">Add New Outlet Here!</h1>
         </Col>
       </Row>
+     {
+      productSubmited?
       <Row>
+        <Col>
+        <h2>Congratulation!!OUtlet saved</h2>
+        </Col>
+      </Row>: <Row>
         <Col lg={6} md={6} xs={6}>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Form.Group className="mb-3">
@@ -104,6 +113,7 @@ const AddNewOutlet = () => {
           </Form>
         </Col>
       </Row>
+     }
     </section>
   );
 };
