@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import axios, { formToJSON } from "axios";
+import axios from "axios";
 
 
 const AddNewOutlet = () => {
