@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Row, Form, Col } from 'react-bootstrap';
+import { Row, Form, Col, Table } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
+import ExpiryForm from './ExpiryForm';
 
 
 
@@ -36,34 +37,17 @@ const AddNewExpiry = () => {
             });
 
     }, [])
-    //upload the expiry
-    const onSubmit = (data) => {
-        // axios
-        //     .post(" http://localhost:4040/newExpiry", data)
-        //     .then((response) => {
-        //         if (response.data === true) {
-        //             setProductSubmited(true)
-        //             reset();
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         console.error("Error submitting data:", error);
-        //         // Handle the error here
-        //     });
-        console.log(data, 'onSubmit called');
-
-    };
+   
     const handleOutletSelect = (event) => {
         setSelectedOutlet(event.target.value)
     }
+    
     return (
         <section>
-            <Row>
-            <Col md={{span:8,offset:2}}>
-                <h2 className='text-secondary'>Add New Expriy From Here!</h2>
-            </Col>
-            </Row>
-            <Row className='mt-5'>
+            <h4 className='text-danger text-center'>
+                Add New Expiry
+            </h4>
+            <Row className='mt-1'>
                 <Form onChange={handleOutletSelect}>
                     <Form.Select>
                         <option value="">Select Outlet</option>
@@ -73,16 +57,7 @@ const AddNewExpiry = () => {
                     </Form.Select>
                 </Form>
             </Row>
-            <Row styles={{border:'dotted'}}>
-                <Col md={{offset:1,span:10}}>
-                  {
-                    allProducts.map((product,index)=>(
-                        <p>{product.productName}</p>
-                    ))
-                  }
-                </Col>
-      </Row>
-     
+           <ExpiryForm selectedOutlet={selectedOutlet} allProducts={allProducts}/>
         </section>
 
     );

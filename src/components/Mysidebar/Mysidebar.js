@@ -10,7 +10,7 @@ const Mysidebar = () => {
     
     return (
         <Sidebar
-        rootStyles={{position: 'absolute',height: '100vh',width: '3vw'}}
+        rootStyles={{position: 'fixed',height: '100vh',width: '3vw'}}
          collapsed={collapsed}  backgroundColor={'lightgrey'}
          transitionDuration={600}>
          <Menu >

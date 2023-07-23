@@ -9,7 +9,7 @@ const Layout = () => {
             <Col md={2} lg={3}>
             <Mysidebar/>
             </Col>
-            <Col md={9} lg={9}>
+            <Col  md={9} lg={9}>
                 <Outlet/>
             </Col>  
         </Row>
