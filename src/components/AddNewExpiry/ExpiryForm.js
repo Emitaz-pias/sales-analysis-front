@@ -4,6 +4,14 @@ import { Col, Form, Row, Table } from 'react-bootstrap';
 const ExpiryForm = ({ allProducts }) => {
   const [productQuantities, setProductQuantities] = useState({});
 
+  const handleKeyPress = (e, index) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (index <30) {
+        const nextInput = document.getElementById(`input-${index + 1}`);
+        nextInput && nextInput.focus();
+      }
+    }}
   const handleQuantityChange = (productId, quantity) => {
     setProductQuantities((prevQuantities) => ({
       ...prevQuantities,
@@ -33,11 +41,13 @@ const ExpiryForm = ({ allProducts }) => {
             </tr>
           </thead>
           <tbody>
-            {allProducts.map((product) => (
+            {allProducts.map((product,index) => (
               <tr key={product._id}>
                 <td>{product.productName}</td>
                 <td>
                   <Form.Control
+                    id={`input-${index}`}
+                    onKeyDown={(e) => handleKeyPress(e, index)}
                     type='number'
                     min='0'
                     value={productQuantities[product._id] || ''}
