@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Col, Form, Row, Table } from 'react-bootstrap';
+import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 
-const ExpiryForm = ({ allProducts }) => {
+const ExpiryForm = ({ allProducts,selectedOutlet,selectedDate }) => {
   const [productQuantities, setProductQuantities] = useState({});
 
   const handleKeyPress = (e, index) => {
@@ -23,11 +23,16 @@ const ExpiryForm = ({ allProducts }) => {
     // Combine product names and quantities into a single array of objects
     const productsWithQuantities = allProducts.map((product) => ({
       ...product,
-      quantity: productQuantities[product._id] || 0,
-    }));
-
+      expiredQuantity: productQuantities[product._id] || 0,
+    })
+    );
     // Use the array of objects as needed (e.g., send it to the server)
-    console.log(productsWithQuantities,'asdkljasdklfj');
+    const expiryDetails ={
+      outletName:selectedOutlet,
+      expiryDate:selectedDate,
+      expiredProducts:productsWithQuantities
+    }
+    console.log(expiryDetails,'is expiry')
   };
 
   return (
@@ -58,7 +63,7 @@ const ExpiryForm = ({ allProducts }) => {
             ))}
           </tbody>
         </Table>
-        <button onClick={handleSubmitExpiry}>Submit</button>
+        <Button onClick={handleSubmitExpiry}>Post To Database</Button>
       </Col>
     </Row>
   );

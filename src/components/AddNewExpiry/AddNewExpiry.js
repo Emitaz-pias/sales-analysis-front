@@ -2,7 +2,6 @@ import axios from 'axios';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Row, Form, Col, Table } from 'react-bootstrap';
-import { useForm } from 'react-hook-form';
 import ExpiryForm from './ExpiryForm';
 
 
@@ -10,7 +9,9 @@ import ExpiryForm from './ExpiryForm';
 const AddNewExpiry = () => {
     const [allOutlets, setAllOutlets] = useState([])
     const [allProducts, setAllProducts] = useState([])
-    const [selectedOutlet, setSelectedOutlet] = useState()
+    const [selectedOutlet, setSelectedOutlet] = useState('')
+    const [selectedDate, setSelectedDate] = useState('')
+
     const [productSubmited, setProductSubmited] = useState(false)
 
     // load all the outlets and all the products
@@ -41,13 +42,16 @@ const AddNewExpiry = () => {
     const handleOutletSelect = (event) => {
         setSelectedOutlet(event.target.value)
     }
-    
+    const handleDateChange = (e) =>{
+        setSelectedDate(e.target.value)
+    }
     return (
         <section>
             <h4 className='text-danger text-center'>
                 Add New Expiry
             </h4>
             <Row className='mt-1'>
+                <Col md={6} lg={5}>
                 <Form onChange={handleOutletSelect}>
                     <Form.Select>
                         <option value="">Select Outlet</option>
@@ -56,8 +60,18 @@ const AddNewExpiry = () => {
                         )}
                     </Form.Select>
                 </Form>
+                </Col>
+                <Col md={6} lg={5}>
+                    <Form onChange={handleDateChange}>
+                            <Form.Group>
+                                <Form.Control type='date'>
+                                </Form.Control>
+                            </Form.Group>
+                    </Form>
+                </Col>
+                
             </Row>
-           <ExpiryForm selectedOutlet={selectedOutlet} allProducts={allProducts}/>
+           <ExpiryForm selectedDate={selectedDate} selectedOutlet={selectedOutlet} allProducts={allProducts}/>
         </section>
 
     );
