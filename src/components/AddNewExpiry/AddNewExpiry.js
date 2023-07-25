@@ -12,7 +12,7 @@ const AddNewExpiry = () => {
     const [selectedOutlet, setSelectedOutlet] = useState('')
     const [selectedDate, setSelectedDate] = useState('')
 
-    const [productSubmited, setProductSubmited] = useState(false)
+        const [productSubmited, setProductSubmited] = useState(false)
 
     // load all the outlets and all the products
     useEffect(() => {
