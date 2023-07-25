@@ -1,5 +1,6 @@
 {
   "name": "dash-q",
+  "proxy": "http://localhost:4040",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
