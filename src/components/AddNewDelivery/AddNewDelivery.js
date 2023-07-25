@@ -70,7 +70,7 @@ const AddNewDelivery = () => {
             </Col>
             
         </Row>
-       <DeliveryForm selectedDate={selectedDate} selectedOutlet={selectedOutlet} allProducts={allProducts}/>
+       <DeliveryForm productSubmited={productSubmited} setProductSubmited={setProductSubmited} selectedDate={selectedDate} selectedOutlet={selectedOutlet} allProducts={allProducts}/>
     </section>
     );
 };

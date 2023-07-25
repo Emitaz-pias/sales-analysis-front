@@ -1,7 +1,8 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 
-const DeliveryForm = ({ allProducts,selectedOutlet,selectedDate }) => {
+const DeliveryForm = ({ allProducts,selectedOutlet,selectedDate,setProductSubmited,productSubmited }) => {
   const [productQuantities, setProductQuantities] = useState({});
 
   const handleKeyPress = (e, index) => {
@@ -11,7 +12,9 @@ const DeliveryForm = ({ allProducts,selectedOutlet,selectedDate }) => {
         const nextInput = document.getElementById(`input-${index + 1}`);
         nextInput && nextInput.focus();
       }
-    }}
+    }
+  
+  }
   const handleQuantityChange = (productId, quantity) => {
     setProductQuantities((prevQuantities) => ({
       ...prevQuantities,
@@ -32,7 +35,19 @@ const DeliveryForm = ({ allProducts,selectedOutlet,selectedDate }) => {
       deliveryDate:selectedDate,
       deliveredProducts:productsWithQuantities
     }
-    console.log(deliveryDetails,'is delivery')
+    axios
+    .post(" http://localhost:4040/postNewDelivery", deliveryDetails)
+    .then((response) => {
+      if (response.data === true) {
+        setProductSubmited(true);
+        setProductQuantities({}); 
+      }
+      
+    })
+    .catch((error) => {
+      console.error("Error submitting data:", error);
+      // Handle the error here
+    });
   };
 
   return (
@@ -65,6 +80,7 @@ const DeliveryForm = ({ allProducts,selectedOutlet,selectedDate }) => {
         </Table>
         <Button onClick={handleSubmitDelivery}>Post To Database</Button>
       </Col>
+
     </Row>
   );
 };

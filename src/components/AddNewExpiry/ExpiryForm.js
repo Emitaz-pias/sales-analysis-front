@@ -38,6 +38,8 @@ const ExpiryForm = ({ allProducts,selectedOutlet,selectedDate ,setProductSubmite
     .then((response) => {
       if(response.data===true){
         setProductSubmited(true)
+        setProductQuantities({}); 
+
       }
     })
     .catch((error) => {
