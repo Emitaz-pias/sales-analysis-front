@@ -71,7 +71,7 @@ const AddNewExpiry = () => {
                 </Col>
                 
             </Row>
-           <ExpiryForm selectedDate={selectedDate} selectedOutlet={selectedOutlet} allProducts={allProducts}/>
+           <ExpiryForm productSubmited={productSubmited} setProductSubmited={setProductSubmited} selectedDate={selectedDate} selectedOutlet={selectedOutlet} allProducts={allProducts}/>
         </section>
 
     );

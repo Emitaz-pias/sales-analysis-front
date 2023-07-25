@@ -1,7 +1,8 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 
-const ExpiryForm = ({ allProducts,selectedOutlet,selectedDate }) => {
+const ExpiryForm = ({ allProducts,selectedOutlet,selectedDate ,setProductSubmited}) => {
   const [productQuantities, setProductQuantities] = useState({});
 
   const handleKeyPress = (e, index) => {
@@ -32,7 +33,18 @@ const ExpiryForm = ({ allProducts,selectedOutlet,selectedDate }) => {
       expiryDate:selectedDate,
       expiredProducts:productsWithQuantities
     }
-    console.log(expiryDetails,'is expiry')
+    axios
+    .post(" http://localhost:4040/postNewExpriry", expiryDetails)
+    .then((response) => {
+      if(response.data===true){
+        setProductSubmited(true)
+      }
+    })
+    .catch((error) => {
+      console.error("Error submitting data:", error);
+      // Handle the error here
+    });
+  
   };
 
   return (
