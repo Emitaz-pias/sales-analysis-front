@@ -26,10 +26,18 @@ const ShowExpiry = () => {
       const onSubmit =(data) => {
         const expriyQuery ={
           outlet:selectedOutlet,
-          dateFrom:data.dateFrom,
-          dateTo:data.dateTo
+          dateFrom:new Date(data.dateFrom),
+          dateTo:new Date(data.dateTo)
         }
-        
+        axios
+        .get('http://localhost:4040/getExpiry',{
+          params: expriyQuery
+        })
+        .then((response) => {
+          console.log(response.data,'is the data')})
+        .catch((error) => {
+          console.error("Error getting data:", error);
+        })
       };
   return (
     <section>

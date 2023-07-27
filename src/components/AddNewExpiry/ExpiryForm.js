@@ -30,7 +30,7 @@ const ExpiryForm = ({ allProducts,selectedOutlet,selectedDate ,setProductSubmite
     // Use the array of objects as needed (e.g., send it to the server)
     const expiryDetails ={
       outletName:selectedOutlet,
-      expiryDate:selectedDate,
+      expiryDate:new Date(selectedDate),
       expiredProducts:productsWithQuantities
     }
     axios
