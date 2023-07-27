@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Row, Form, Col, Table } from 'react-bootstrap';
+import { Row, Form, Col } from 'react-bootstrap';
 import ExpiryForm from './ExpiryForm';
 
 
