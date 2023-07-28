@@ -2,7 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { Button, Col, Form, Row, Table } from 'react-bootstrap';
+import {  Col, Form, Row } from 'react-bootstrap';
 import DeliveryForm from './DeliveryForm';
 
 
