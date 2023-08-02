@@ -51,7 +51,7 @@ const DeliveryForm = ({ allProducts,selectedOutlet,selectedDate,setProductSubmit
   };
   const handleAddNewDelivery = (e) => {
     e.stopPropagation(); // Prevent the event from bubbling up to parent elements
-    setProductSubmited(false);
+    setProductSubmited(!productSubmited);
   };
 
   return (

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { Button, Col, Form, Row, Table } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 
 const ExpiryForm = ({ productSubmited,allProducts,selectedOutlet,selectedDate ,setProductSubmited}) => {
   const [productQuantities, setProductQuantities] = useState({});
@@ -51,7 +50,8 @@ const ExpiryForm = ({ productSubmited,allProducts,selectedOutlet,selectedDate ,s
   };
   const handleAddNewExpiry = (e) => {
     e.stopPropagation(); // Prevent the event from bubbling up to parent elements
-    setProductSubmited(false);
+    
+    setProductSubmited(!productSubmited);
   };
 
   return (
