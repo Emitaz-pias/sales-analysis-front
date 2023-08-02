@@ -25,121 +25,60 @@ const ShowExpiry = () => {
           setSelectedOutlet(event.target.value)
       }
       // calculation part
-    
-// Function to calculate the percentage of expired products against delivered products
-// Function to calculate the percentage of expired products against delivered products
-// Function to calculate the percentage of expired products against delivered products
-// Function to calculate the percentage of expired products against delivered products
-// Function to calculate the percentage of expired products against delivered products
-// one of the rihgt fucntion//
-// function calculateExpiredPercentage(deliveryData, expiryData) {
-//   const result = [];
-
-//   deliveryData.forEach((deliveredProduct) => {
-//     const { deliveredProducts } = deliveredProduct;
-
-//     deliveredProducts.forEach((product) => {
-//       const { productCode, productName, deliveryQuantity } = product;
-
-//       const expiredProduct = expiryData.find((item) => {
-//         return (
-//           item.expiredProducts &&
-//           item.expiredProducts.some(
-//             (expiredItem) =>
-//               expiredItem.productCode === productCode &&
-//               expiredItem.productName === productName
-//           )
-//         );
-//       });
-
-//       const expiredCount = expiredProduct
-//         ? expiredProduct.expiredProducts.reduce(
-//             (acc, expiredItem) =>
-//               acc +
-//               (expiredItem.productCode === productCode &&
-//               expiredItem.productName === productName
-//                 ? expiredItem.expiredQuantity
-//                 : 0),
-//             0
-//           )
-//         : 0;
-
-//       const totalExpiredProducts = expiredCount;
-//       const totalProducts = deliveryQuantity + totalExpiredProducts;
-//       const expiredPercentage =
-//         totalProducts === 0 ? 0 : (100 * (totalExpiredProducts / totalProducts));
-
-//       const existingProductIndex = result.findIndex(
-//         (item) =>
-//           item.productCode === productCode && item.productName === productName
-//       );
-
-//       if (existingProductIndex !== -1) {
-//         result[existingProductIndex].expiredPercentage = expiredPercentage;
-//         result[existingProductIndex].totalExpiredProducts = totalExpiredProducts;
-//       } else {
-//         result.push({
-//           productCode,
-//           productName,
-//           deliveryQuantity,
-//           totalExpiredProducts,
-//           expiredPercentage,
-//         });
-//       }
-//     });
-//   });
-
-//   return result;
-// }
 function calculateExpiredPercentage(deliveryData, expiryData) {
-  const result = [];
+  const productMap = new Map();
 
+  // Step 1: Sum the total deliveredQuantity and total expiredQuantity for each specific product
+  function updateProductData(product, quantityToAdd, isExpired) {
+    const { productCode, productName } = product;
+    const key = `${productCode}-${productName}`;
+
+    if (!productMap.has(key)) {
+      productMap.set(key, {
+        productCode,
+        productName,
+        deliveredQuantity: 0,
+        expiredQuantity: 0,
+        expiredPercentage: 0,
+      });
+    }
+
+    if (isExpired) {
+      productMap.get(key).expiredQuantity += quantityToAdd;
+    } else {
+      productMap.get(key).deliveredQuantity += quantityToAdd;
+    }
+  }
+
+  // Process deliveryData
   deliveryData.forEach((deliveredProduct) => {
     const { deliveredProducts } = deliveredProduct;
 
     deliveredProducts.forEach((product) => {
-      const { productCode, productName, deliveredQuantity } = product;
-
-      const expiredProduct = expiryData.find((item) => {
-        return (
-          item.expiredProducts &&
-          item.expiredProducts.some(
-            (expiredItem) =>
-              expiredItem.productCode === productCode &&
-              expiredItem.productName === productName
-          )
-        );
-      });
-
-      const expiredCount = expiredProduct
-        ? expiredProduct.expiredProducts.reduce(
-            (acc, expiredItem) =>
-              acc +
-              (expiredItem.productCode === productCode &&
-              expiredItem.productName === productName
-                ? expiredItem.expiredQuantity
-                : 0),
-            0
-          )
-        : 0;
-
-      const totalProducts = deliveredQuantity + expiredCount;
-      const expiredPercentage =
-        totalProducts === 0 ? 0 : (100 * (expiredCount / totalProducts));
-
-      result.push({
-        productCode,
-        productName,
-        deliveredQuantity,
-        expiredQuantity: expiredCount,
-        expiredPercentage,
-      });
+      const {  deliveryQuantity } = product;
+      updateProductData(product, parseInt(deliveryQuantity, 10), false);
     });
+  });
+
+  // Process expiryData
+  expiryData.forEach((expiredProduct) => {
+    const { expiredProducts } = expiredProduct;
+
+    expiredProducts.forEach((product) => {
+      const {expiredQuantity } = product;
+      updateProductData(product, parseInt(expiredQuantity, 10), true);
+    });
+  });
+
+  // Step 2: Calculate the expired percentage for each specific product
+  const result = Array.from(productMap.values());
+  result.forEach((product) => {
+    const { deliveredQuantity, expiredQuantity } = product;
+    product.expiredPercentage = (expiredQuantity / deliveredQuantity) * 100 || 0;
   });
 
   return result;
 }
-
 
 
 
@@ -156,7 +95,7 @@ function calculateExpiredPercentage(deliveryData, expiryData) {
           params: expriyQuery
         })
         .then((response) => {
-     console.log(  calculateExpiredPercentage(response.data.deliveryData,response.data.expiryData))
+     console.log(calculateExpiredPercentage(response.data.deliveryData,response.data.expiryData));
 })
           
         .catch((error) => {
