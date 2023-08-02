@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { Button, Col, Form, Row, Table } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
-const ExpiryForm = ({ allProducts,selectedOutlet,selectedDate ,setProductSubmited}) => {
+const ExpiryForm = ({ productSubmited,allProducts,selectedOutlet,selectedDate ,setProductSubmited}) => {
   const [productQuantities, setProductQuantities] = useState({});
 
   const handleKeyPress = (e, index) => {
@@ -48,9 +49,14 @@ const ExpiryForm = ({ allProducts,selectedOutlet,selectedDate ,setProductSubmite
     });
   
   };
+  const handleAddNewExpiry = (e) => {
+    e.stopPropagation(); // Prevent the event from bubbling up to parent elements
+    setProductSubmited(false);
+  };
 
   return (
-    <Row className='mt-1' style={{ height: '90vh', border: '2px dotted gray', overflowY: 'scroll' }}>
+    <div>
+        {productSubmited?<p className='text-success'>Congratulations!! Expriry Added <Button onClick={ handleAddNewExpiry} >Add New Expiry</Button></p>:<Row className='mt-1' style={{ height: '90vh', border: '2px dotted gray', overflowY: 'scroll' }}>
       <Col md={{ span: 11 }}>
         <Table striped bordered hover>
           <thead>
@@ -79,7 +85,9 @@ const ExpiryForm = ({ allProducts,selectedOutlet,selectedDate ,setProductSubmite
         </Table>
         <Button onClick={handleSubmitExpiry}>Post To Database</Button>
       </Col>
-    </Row>
+    </Row>}
+    </div>
+    
   );
 };
 

@@ -1,16 +1,17 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Col, Form, Row } from 'react-bootstrap';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
+import { Table } from 'react-bootstrap';
+
 
 const ShowExpiry = () => {
   const { register, handleSubmit} = useForm();
   const [allOutlets, setAllOutlets] = useState([])
   const [selectedOutlet, setSelectedOutlet] = useState('')
+  const [expiryData,setExpriyData] = useState([])
 
-
-  
-  useEffect(() => {
+    useEffect(() => {
     axios
         .get(" http://localhost:4040/getAllOutlets")
         .then((response) => {
@@ -77,7 +78,7 @@ function calculateExpiredPercentage(deliveryData, expiryData) {
     product.expiredPercentage = (expiredQuantity / deliveredQuantity) * 100 || 0;
   });
 
-  return result;
+  return setExpriyData( result);
 }
 
 
@@ -95,7 +96,7 @@ function calculateExpiredPercentage(deliveryData, expiryData) {
           params: expriyQuery
         })
         .then((response) => {
-     console.log(calculateExpiredPercentage(response.data.deliveryData,response.data.expiryData));
+     calculateExpiredPercentage(response.data.deliveryData,response.data.expiryData)
 })
           
         .catch((error) => {
@@ -103,7 +104,9 @@ function calculateExpiredPercentage(deliveryData, expiryData) {
         })
       };
  
-
+      const handlePrint = () => {
+        window.print();
+      };
 
   return (
     <section>
@@ -142,6 +145,36 @@ function calculateExpiredPercentage(deliveryData, expiryData) {
 
         <Form.Control className='mt-3' type="submit" />
       </Form>
+      <Row>
+<Col md={{ offset:1,span:10}}>
+<Table striped bordered hover responsive>
+      <thead>
+        <tr>
+          <th>Product Code</th>
+          <th>Product Name</th>
+          <th>Delivered Quantity</th>
+          <th>Expired Quantity</th>
+          <th>Expired Percentage</th>
+        </tr>
+      </thead>
+ 
+        {expiryData.length!==0?<tbody>{expiryData.map((item, index) => (
+          <tr key={index}>
+            <td>{item.productCode}</td>
+            <td>{item.productName}</td>
+            <td>{item.deliveredQuantity}</td>
+            <td>{item.expiredQuantity}</td>
+            <td>{item.expiredPercentage}%</td>
+          </tr>
+        ))}</tbody>:<h1>select outlet and date to get expiry Data</h1>}
+        
+   
+    </Table>
+</Col>
+<Button variant="primary" onClick={handlePrint}>
+        Print Data
+      </Button>
+      </Row>
     </section>
   );
 };

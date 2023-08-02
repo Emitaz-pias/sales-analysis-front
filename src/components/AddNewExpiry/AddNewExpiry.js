@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Row, Form, Col } from 'react-bootstrap';
+import { Row, Form, Col, Button } from 'react-bootstrap';
 import ExpiryForm from './ExpiryForm';
+import { Link } from 'react-router-dom';
 
 
 
@@ -71,7 +72,7 @@ const AddNewExpiry = () => {
                 </Col>
                 
             </Row>
-            {productSubmited?<h1>add new expriry</h1>:<ExpiryForm productSubmited={productSubmited} setProductSubmited={setProductSubmited} selectedDate={selectedDate} selectedOutlet={selectedOutlet} allProducts={allProducts}/>}
+          <ExpiryForm productSubmited={productSubmited} setProductSubmited={setProductSubmited} selectedDate={selectedDate} selectedOutlet={selectedOutlet} allProducts={allProducts}/>
            
         </section>
 

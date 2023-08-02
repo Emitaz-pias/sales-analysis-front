@@ -49,39 +49,44 @@ const DeliveryForm = ({ allProducts,selectedOutlet,selectedDate,setProductSubmit
       // Handle the error here
     });
   };
+  const handleAddNewDelivery = (e) => {
+    e.stopPropagation(); // Prevent the event from bubbling up to parent elements
+    setProductSubmited(false);
+  };
 
   return (
-    <Row className='mt-1' style={{ height: '90vh', border: '2px dotted gray', overflowY: 'scroll' }}>
-      <Col md={{ span: 11 }}>
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>Product Name</th>
-              <th>Quantity</th>
+    <div>  {productSubmited?<p className='text-success'>Congratulations!! delivery added <Button onClick={ handleAddNewDelivery} >Add New Delivery</Button></p>:<Row className='mt-1' style={{ height: '90vh', border: '2px dotted gray', overflowY: 'scroll' }}>
+    <Col md={{ span: 11 }}>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Product Name</th>
+            <th>Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {allProducts.map((product,index) => (
+            <tr key={product._id}>
+              <td>{product.productName}</td>
+              <td>
+                <Form.Control
+                  id={`input-${index}`}
+                  onKeyDown={(e) => handleKeyPress(e, index)}
+                  type='number'
+                  min='0'
+                  value={productQuantities[product._id] || ''}
+                  onChange={(e) => handleQuantityChange(product._id, parseInt(e.target.value))}
+                />
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {allProducts.map((product,index) => (
-              <tr key={product._id}>
-                <td>{product.productName}</td>
-                <td>
-                  <Form.Control
-                    id={`input-${index}`}
-                    onKeyDown={(e) => handleKeyPress(e, index)}
-                    type='number'
-                    min='0'
-                    value={productQuantities[product._id] || ''}
-                    onChange={(e) => handleQuantityChange(product._id, parseInt(e.target.value))}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-        <Button onClick={handleSubmitDelivery}>Post To Database</Button>
-      </Col>
+          ))}
+        </tbody>
+      </Table>
+      <Button onClick={handleSubmitDelivery}>Post To Database</Button>
+    </Col>
 
-    </Row>
+  </Row>}</div>
+    
   );
 };
 
