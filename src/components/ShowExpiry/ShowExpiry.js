@@ -12,9 +12,9 @@ const ShowExpiry = () => {
   const [expiryData,setExpriyData] = useState([])
   const [dateFrom,setDateFrom]=useState('')
   const [dateTo,setDateTo]=useState('')
-  const [avgDelivery,setAvgDelivery] = useState([])
 
 const [deliveryDates,setDeliveryDates] = useState([])
+const [expiryDates,setExpiryDates]=useState([])
     useEffect(() => {
     axios
         .get(" http://localhost:4040/getAllOutlets")
@@ -29,7 +29,79 @@ const [deliveryDates,setDeliveryDates] = useState([])
         const handleOutletSelect = (event) => {
           setSelectedOutlet(event.target.value)
       }
-      // calculation part
+
+
+// function calculateAverageDelivery(deliveryData, deliveryDates) {
+//   const productMap = new Map();
+
+//   // Step 1: Sum the total deliveredQuantity for each specific product
+//   function updateProductData(product, quantityToAdd) {
+//     const { productCode, productName } = product;
+//     const key = `${productCode}-${productName}`;
+
+//     if (!productMap.has(key)) {
+//       productMap.set(key, {
+//         productCode,
+//         productName,
+//         totalDeliveredQuantity: 0,
+//         averageDelivery: 0,
+//       });
+//     }
+
+//     productMap.get(key).totalDeliveredQuantity += quantityToAdd;
+//   }
+
+//   // Process deliveryData
+//   deliveryData.forEach((deliveredProduct) => {
+//     const { deliveredProducts } = deliveredProduct;
+
+//     deliveredProducts.forEach((product) => {
+//       const { deliveryQuantity } = product;
+//       updateProductData(product, parseInt(deliveryQuantity, 10));
+//     });
+//   });
+
+//   // Calculate average delivery for each specific product
+//   const result = Array.from(productMap.values());
+//   result.forEach((product) => {
+//     const { totalDeliveredQuantity } = product;
+//   const averageDelivery = totalDeliveredQuantity / deliveryDates.length || 0;
+//   product.averageDelivery = parseFloat(averageDelivery.toFixed(2)); 
+
+
+//   });
+
+
+//   setAvgDelivery(result);
+// }
+  
+    
+      //
+      const onSubmit =(data) => {
+        setDateFrom(data.dateFrom)
+        setDateTo(data.dateTo)
+        
+        const expriyQuery ={
+          outlet:selectedOutlet,
+          dateFrom:new Date(data.dateFrom),
+          dateTo:new Date(data.dateTo)
+        }
+        axios
+        .get('http://localhost:4040/getExpiry',{
+          params: expriyQuery
+        })
+        .then((response) => {
+     calculateExpiredPercentage(response.data.deliveryData,response.data.expiryData)
+     setDeliveryDates(response.data.deliveryData)
+     setExpiryDates(response.data.expiryData)
+     
+})
+          
+        .catch((error) => {
+          console.error("Error getting data:", error);
+        })
+      };
+           // calculation part
 function calculateExpiredPercentage(deliveryData, expiryData) {
   const productMap = new Map();
 
@@ -76,88 +148,31 @@ function calculateExpiredPercentage(deliveryData, expiryData) {
   });
 
   // Step 2: Calculate the expired percentage for each specific product
+  // const result = Array.from(productMap.values());
+  // result.forEach((product) => {
+  //   const { deliveredQuantity, expiredQuantity } = product;
+  //   product.expiredPercentage = (expiredQuantity / deliveredQuantity) * 100 || 0;
+  // });
+
+  // new funcitons
+    // Calculate the expired percentage and average delivery for each specific product
   const result = Array.from(productMap.values());
   result.forEach((product) => {
     const { deliveredQuantity, expiredQuantity } = product;
     product.expiredPercentage = (expiredQuantity / deliveredQuantity) * 100 || 0;
-  });
-
-  return setExpriyData( result);
-}
-
-
-function calculateAverageDelivery(deliveryData, deliveryDates) {
-  const productMap = new Map();
-
-  // Step 1: Sum the total deliveredQuantity for each specific product
-  function updateProductData(product, quantityToAdd) {
-    const { productCode, productName } = product;
-    const key = `${productCode}-${productName}`;
-
-    if (!productMap.has(key)) {
-      productMap.set(key, {
-        productCode,
-        productName,
-        totalDeliveredQuantity: 0,
-        averageDelivery: 0,
-      });
+  
+    if (deliveryDates.length > 0) {
+      const averageDelivery = deliveredQuantity / deliveryDates.length || 0;
+      product.averageDelivery = parseFloat(averageDelivery.toFixed(2));
+      
+      const expiredAmount = (product.expiredPercentage / 100) * averageDelivery;
+      const projectedDelivery = (averageDelivery - expiredAmount).toFixed(2);
+      product.projectedDelivery = parseFloat(projectedDelivery);
     }
-
-    productMap.get(key).totalDeliveredQuantity += quantityToAdd;
-  }
-
-  // Process deliveryData
-  deliveryData.forEach((deliveredProduct) => {
-    const { deliveredProducts } = deliveredProduct;
-
-    deliveredProducts.forEach((product) => {
-      const { deliveryQuantity } = product;
-      updateProductData(product, parseInt(deliveryQuantity, 10));
-    });
   });
 
-  // Calculate average delivery for each specific product
-  const result = Array.from(productMap.values());
-  result.forEach((product) => {
-    const { totalDeliveredQuantity } = product;
-  const averageDelivery = totalDeliveredQuantity / deliveryDates.length || 0;
-  product.averageDelivery = parseFloat(averageDelivery.toFixed(2)); 
-
-
-  });
-
-
-  setAvgDelivery(result);
+  return setExpriyData(result);
 }
-
-console.log(avgDelivery)
-    
-      //
-      const onSubmit =(data) => {
-        setDateFrom(data.dateFrom)
-        setDateTo(data.dateTo)
-        
-        const expriyQuery ={
-          outlet:selectedOutlet,
-          dateFrom:new Date(data.dateFrom),
-          dateTo:new Date(data.dateTo)
-        }
-        axios
-        .get('http://localhost:4040/getExpiry',{
-          params: expriyQuery
-        })
-        .then((response) => {
-     calculateExpiredPercentage(response.data.deliveryData,response.data.expiryData)
-     setDeliveryDates(response.data.deliveryData)
-     if(deliveryDates.length>0){
-     calculateAverageDelivery(response.data.deliveryData,deliveryDates)
-     }
-})
-          
-        .catch((error) => {
-          console.error("Error getting data:", error);
-        })
-      };
  // avg delivery data
 
  
@@ -226,9 +241,9 @@ console.log(avgDelivery)
       <tbody>
         <tr>
           <td>{dateFrom}</td>
-          <td>{dateFrom}</td>
+          <td>{dateTo}</td>
           <td>{deliveryDates.length}</td>
-          <td>{expiryData.length}</td>
+          <td>{expiryDates.length}</td>
         </tr>
       </tbody>
   </Table>
@@ -240,7 +255,7 @@ console.log(avgDelivery)
           <th>Delivered Quantity</th>
           <th>Expired Quantity</th>
           <th>Expired Percentage</th>
-          {avgDelivery.map()}
+          
           <th>Current AVG Delivery</th>
           <th>Projected Delivery</th>
 
@@ -248,15 +263,15 @@ console.log(avgDelivery)
         </tr>
       </thead>
  
-        {expiryData.length!==0?<tbody>{expiryData.map((item, index) => (
+        {expiryData.length>0?<tbody>{expiryData.map((item, index) => (
           <tr key={index}>
             <td>{item.productCode}</td>
               <td>{item.productName}</td>
             <td>{item.deliveredQuantity}</td>
             <td>{item.expiredQuantity}</td>
-            <td>{item.expiredPercentage.toFixed(2)}%</td>
-            <th>Current AVG Delivery</th>
-          <th>Projected Delivery</th>
+            <td>{item.expiredPercentage>0&& item.expiredPercentage.toFixed(2)}% </td>
+            <td>{item.averageDelivery >0&& parseInt(item.averageDelivery)}</td>
+               <td>{ item.projectedDelivery >0&& parseInt( item.projectedDelivery.toFixed(2))}</td>
 
           </tr>
         ))}</tbody>:<h1>select outlet and date to get expiry Data</h1>}
@@ -269,7 +284,6 @@ console.log(avgDelivery)
       </Button>
       </Row>
     </section>
-  );
-};
+  )}
 
 export default ShowExpiry;
