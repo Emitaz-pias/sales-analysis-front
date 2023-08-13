@@ -10,7 +10,11 @@ const ShowExpiry = () => {
   const [allOutlets, setAllOutlets] = useState([])
   const [selectedOutlet, setSelectedOutlet] = useState('')
   const [expiryData,setExpriyData] = useState([])
+  const [dateFrom,setDateFrom]=useState('')
+  const [dateTo,setDateTo]=useState('')
+  const [avgDelivery,setAvgDelivery] = useState([])
 
+const [deliveryDates,setDeliveryDates] = useState([])
     useEffect(() => {
     axios
         .get(" http://localhost:4040/getAllOutlets")
@@ -82,10 +86,57 @@ function calculateExpiredPercentage(deliveryData, expiryData) {
 }
 
 
+function calculateAverageDelivery(deliveryData, deliveryDates) {
+  const productMap = new Map();
 
-      
+  // Step 1: Sum the total deliveredQuantity for each specific product
+  function updateProductData(product, quantityToAdd) {
+    const { productCode, productName } = product;
+    const key = `${productCode}-${productName}`;
+
+    if (!productMap.has(key)) {
+      productMap.set(key, {
+        productCode,
+        productName,
+        totalDeliveredQuantity: 0,
+        averageDelivery: 0,
+      });
+    }
+
+    productMap.get(key).totalDeliveredQuantity += quantityToAdd;
+  }
+
+  // Process deliveryData
+  deliveryData.forEach((deliveredProduct) => {
+    const { deliveredProducts } = deliveredProduct;
+
+    deliveredProducts.forEach((product) => {
+      const { deliveryQuantity } = product;
+      updateProductData(product, parseInt(deliveryQuantity, 10));
+    });
+  });
+
+  // Calculate average delivery for each specific product
+  const result = Array.from(productMap.values());
+  result.forEach((product) => {
+    const { totalDeliveredQuantity } = product;
+  const averageDelivery = totalDeliveredQuantity / deliveryDates.length || 0;
+  product.averageDelivery = parseFloat(averageDelivery.toFixed(2)); 
+
+
+  });
+
+
+  setAvgDelivery(result);
+}
+
+console.log(avgDelivery)
+    
       //
       const onSubmit =(data) => {
+        setDateFrom(data.dateFrom)
+        setDateTo(data.dateTo)
+        
         const expriyQuery ={
           outlet:selectedOutlet,
           dateFrom:new Date(data.dateFrom),
@@ -97,15 +148,30 @@ function calculateExpiredPercentage(deliveryData, expiryData) {
         })
         .then((response) => {
      calculateExpiredPercentage(response.data.deliveryData,response.data.expiryData)
+     setDeliveryDates(response.data.deliveryData)
+     if(deliveryDates.length>0){
+     calculateAverageDelivery(response.data.deliveryData,deliveryDates)
+     }
 })
           
         .catch((error) => {
           console.error("Error getting data:", error);
         })
       };
+ // avg delivery data
+
  
+  // printing logics
       const handlePrint = () => {
-        window.print();
+        const printWindow = window.open('', '_blank');
+    const printContent = document.querySelector('.print-content');
+    if (printWindow && printContent) {
+      printWindow.document.write('<html><head><title>Print</title></head><body>');
+      printWindow.document.write(printContent.outerHTML);
+      printWindow.document.write('</body></html>');
+      printWindow.document.close();
+      printWindow.print();
+    }
       };
 
   return (
@@ -146,7 +212,26 @@ function calculateExpiredPercentage(deliveryData, expiryData) {
         <Form.Control className='mt-3' type="submit" />
       </Form>
       <Row>
-<Col md={{ offset:1,span:10}}>
+<Col md={{ offset:1,span:10}} className='print-content'>
+  <h2 className='text-center'>{selectedOutlet}</h2>
+  <Table striped bordered hover responsive>
+  <thead>
+        <tr>
+          <th>Delivery From</th>
+          <th>Delivery To</th>
+          <th>Total Delivery</th>
+          <th>Total Expiry</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{dateFrom}</td>
+          <td>{dateFrom}</td>
+          <td>{deliveryDates.length}</td>
+          <td>{expiryData.length}</td>
+        </tr>
+      </tbody>
+  </Table>
 <Table striped bordered hover responsive>
       <thead>
         <tr>
@@ -155,16 +240,24 @@ function calculateExpiredPercentage(deliveryData, expiryData) {
           <th>Delivered Quantity</th>
           <th>Expired Quantity</th>
           <th>Expired Percentage</th>
+          {avgDelivery.map()}
+          <th>Current AVG Delivery</th>
+          <th>Projected Delivery</th>
+
+
         </tr>
       </thead>
  
         {expiryData.length!==0?<tbody>{expiryData.map((item, index) => (
           <tr key={index}>
             <td>{item.productCode}</td>
-            <td>{item.productName}</td>
+              <td>{item.productName}</td>
             <td>{item.deliveredQuantity}</td>
             <td>{item.expiredQuantity}</td>
-            <td>{item.expiredPercentage}%</td>
+            <td>{item.expiredPercentage.toFixed(2)}%</td>
+            <th>Current AVG Delivery</th>
+          <th>Projected Delivery</th>
+
           </tr>
         ))}</tbody>:<h1>select outlet and date to get expiry Data</h1>}
         
