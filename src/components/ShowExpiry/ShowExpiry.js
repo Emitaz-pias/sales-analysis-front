@@ -168,6 +168,7 @@ function calculateExpiredPercentage(deliveryData, expiryData) {
       const expiredAmount = (product.expiredPercentage / 100) * averageDelivery;
       const projectedDelivery = (averageDelivery - expiredAmount).toFixed(2);
       product.projectedDelivery = parseFloat(projectedDelivery);
+      // some comment
     }
   });
 
