@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { Table } from 'react-bootstrap';
+import LoadingSpinner from '../Layout/LoadingSpinner';
 
 
 const ShowExpiry = () => {
@@ -12,13 +13,17 @@ const ShowExpiry = () => {
   const [expiryData,setExpriyData] = useState([])
   const [dateFrom,setDateFrom]=useState('')
   const [dateTo,setDateTo]=useState('')
-
 const [deliveryDates,setDeliveryDates] = useState([])
 const [expiryDates,setExpiryDates]=useState([])
+
+let [loading, setLoading] = useState(true);
     useEffect(() => {
     axios
         .get(" http://localhost:4040/getAllOutlets")
         .then((response) => {
+          if(response.data){
+            setLoading(false)
+          }
             setAllOutlets(response.data)
         })
         .catch((error) => {
@@ -193,9 +198,8 @@ function calculateExpiredPercentage(deliveryData, expiryData) {
   return (
     <section>
       <h2 className='text-danger text-center'>show expiry</h2>
-
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Row>
+        {loading?<LoadingSpinner loading={loading} />:  <Row>
           <Col>
 
             <Form.Group >
@@ -223,11 +227,12 @@ function calculateExpiredPercentage(deliveryData, expiryData) {
             <Form.Control type="date" placeholder="Date To" {...register("dateTo", { required: true })} />
             </Form.Group>
              </Col>
-        </Row>
+        </Row>}
+      
 
         <Form.Control className='mt-3' type="submit" />
       </Form>
-      <Row>
+   <Row>
 <Col md={{ offset:1,span:10}} className='print-content'>
   <h2 className='text-center'>{selectedOutlet}</h2>
   <Table striped bordered hover responsive>
@@ -264,7 +269,8 @@ function calculateExpiredPercentage(deliveryData, expiryData) {
         </tr>
       </thead>
  
-        {expiryData.length>0?<tbody>{expiryData.map((item, index) => (
+        {expiryData.length>0?<tbody>
+          {expiryData.map((item, index) => (
           <tr key={index}>
             <td>{item.productCode}</td>
               <td>{item.productName}</td>
@@ -275,7 +281,7 @@ function calculateExpiredPercentage(deliveryData, expiryData) {
                <td>{ item.projectedDelivery >0&& parseInt( item.projectedDelivery.toFixed(2))}</td>
 
           </tr>
-        ))}</tbody>:<h1>select outlet and date to get expiry Data</h1>}
+        ))}</tbody>:<LoadingSpinner></LoadingSpinner>}
         
    
     </Table>
@@ -284,6 +290,7 @@ function calculateExpiredPercentage(deliveryData, expiryData) {
         Print Data
       </Button>
       </Row>
+      
     </section>
   )}
 

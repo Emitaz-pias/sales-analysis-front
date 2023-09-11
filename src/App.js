@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import 'font-awesome/css/font-awesome.min.css';
 import AddNewOutlet from './components/AddNewOutlet/AddNewOutlet';
 import AddNewProducts from './components/AddNewProducts/AddNewProducts';
 import Layout from './components/Layout/Layout';
@@ -12,7 +13,9 @@ import ShowProjection from './components/ShowProjection/ShowProjection';
 
 
 
+
 function App() {
+  
   return (
     <BrowserRouter>
       <Routes>
@@ -24,12 +27,6 @@ function App() {
         <Route path="/addNewDelivery" element={<AddNewDelivery />}/>
         <Route path="/showExpiry" element={<ShowExpiry   />}/>
         <Route path="/showProjection" element={<ShowProjection   />}/>
-
-        
-
-
-
-        
         </Route>
       </Routes>
     </BrowserRouter>

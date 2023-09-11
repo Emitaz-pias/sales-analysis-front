@@ -1,6 +1,8 @@
 import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faCoffee, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 const Mysidebar = () => {
     const [collapsed,setCollapsed] =useState(false)
@@ -14,8 +16,8 @@ const Mysidebar = () => {
          collapsed={collapsed}  backgroundColor={'lightgrey'}
          transitionDuration={600}>
          <Menu >
-         <MenuItem onClick={onCollapesd}>{collapsed?'open':'close'}</MenuItem>
-            <MenuItem component={<Link to="/"/>}>Home</MenuItem>
+         <MenuItem onClick={onCollapesd}>{collapsed? <FontAwesomeIcon beatFade icon={faBars} color='pink'/>: <FontAwesomeIcon icon={faX } spin />}</MenuItem>
+            <MenuItem component={<Link to="/"/>}>Home </MenuItem>
             <MenuItem component={<Link to="/addNewOutlet" />}> Add New Outlet</MenuItem>
             <MenuItem component={<Link to="/addNewProducts" />}> Add New Products</MenuItem>
             <MenuItem component={<Link to="/addNewExpiry" />}> Add New Expiray</MenuItem>
