@@ -26,8 +26,7 @@ const Mysidebar = () => {
             <MenuItem component={<Link className='customSidebarMenu'   to="/addNewDelivery" />}> <FontAwesomeIcon icon={faTruck} /> <span className='ms-2'>Add New Delivery</span> </MenuItem>
             <MenuItem component={<Link className='customSidebarMenu'   to="/showExpiry" />}><FontAwesomeIcon icon={faCalculator} /> <span className='ms-2'> Show Expiry Reports</span> </MenuItem>
             <MenuItem component={<Link className='customSidebarMenu'   to="/showProjection" />}> <FontAwesomeIcon icon={faTable} /> <span className='ms-2'> Show Projection</span></MenuItem>
-
-            
+    
         </Menu>
 </Sidebar>
     );
