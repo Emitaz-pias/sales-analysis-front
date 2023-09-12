@@ -5,6 +5,7 @@ import './Loading.css'
 const Loading = () => {
     return (
         <section className='loadingMain d-flex justify-content-center align-items-center' >
+            <p>
             <ScaleLoader
                 color="#36d7b7"
                 height={50}
@@ -13,7 +14,9 @@ const Loading = () => {
                 loading
                 speedMultiplier={1}
                     />
-                    <p></p>
+            </p>
+
+                    <p>Please wait while the app is loaded</p>
         </section>
     );
 };

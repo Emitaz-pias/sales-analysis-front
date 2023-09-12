@@ -7,7 +7,7 @@ import Loading from '../Loading/Loading';
 
 
 const Layout = () => {
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         // Simulate an asynchronous operation, like connecting to the server.
         // Replace this with your actual server connection logic.
