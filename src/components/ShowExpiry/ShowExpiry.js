@@ -159,20 +159,32 @@ function calculateExpiredPercentage(deliveryData, expiryData) {
   const result = Array.from(productMap.values());
   result.forEach((product) => {
     const { deliveredQuantity, expiredQuantity } = product;
-    product.expiredPercentage = (expiredQuantity / deliveredQuantity) * 100 || 0;
+    product.expiredPercentage = deliveredQuantity !== 0 ? (expiredQuantity / deliveredQuantity) * 100 : 0;
+
+
   
     if (deliveryDates.length > 0) {
       const averageDelivery = deliveredQuantity / deliveryDates.length || 0;
-      product.averageDelivery = parseFloat(averageDelivery.toFixed(2));
+      product.averageDelivery = Math.ceil(averageDelivery);
       
       const expiredAmount = (product.expiredPercentage / 100) * averageDelivery;
       const projectedDelivery = (averageDelivery - expiredAmount).toFixed(2);
-      product.projectedDelivery = parseFloat(projectedDelivery);
+      product.projectedDelivery = Math.ceil(projectedDelivery);
       // some comment
     }
-  });
+// if( product.expiredPercentage>0 && product.expiredPercentage!==Infinity){
 
-  return setExpriyData(result);
+//   const expiredPercentages = result.map((product) => product.expiredPercentage);
+//   const totalExpiredPercentage = expiredPercentages.reduce((acc, percentage) => acc + percentage, 0);
+//   const averageExpiredPercentage = (totalExpiredPercentage / result.length) || 0;
+//   console.log(totalExpiredPercentage)
+// }
+   
+  });
+ 
+  return setExpriyData(result
+  )
+  
 }
  // avg delivery data
 
@@ -263,7 +275,6 @@ function calculateExpiredPercentage(deliveryData, expiryData) {
 
         </tr>
       </thead>
- 
         {expiryData.length>0?<tbody>{expiryData.map((item, index) => (
           <tr key={index}>
             <td>{item.productCode}</td>
