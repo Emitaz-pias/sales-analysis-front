@@ -172,7 +172,7 @@ const ShowExpiry = () => {
         product.averageDelivery = parseFloat(averageDelivery.toFixed(2));
 
         const expiredAmount = (product.expiredPercentage / 100) * averageDelivery;
-        const projectedDelivery = (averageDelivery - expiredAmount).toFixed(2);
+        const projectedDelivery = (averageDelivery - expiredAmount).toFixed(3);
         product.projectedDelivery = parseFloat(projectedDelivery);
         // some comment
       }
