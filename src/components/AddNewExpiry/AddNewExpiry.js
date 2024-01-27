@@ -11,8 +11,8 @@ const AddNewExpiry = () => {
     const [allProducts, setAllProducts] = useState([])
     const [selectedOutlet, setSelectedOutlet] = useState('')
     const [selectedDate, setSelectedDate] = useState('')
-
-        const [productSubmited, setProductSubmited] = useState(false)
+    const [productSubmited, setProductSubmited] = useState(false)
+    const [returnAmount,setReturnAmount] = useState('')
 
     // load all the outlets and all the products
     useEffect(() => {
@@ -45,13 +45,16 @@ const AddNewExpiry = () => {
     const handleDateChange = (e) =>{
         setSelectedDate(e.target.value)
     }
+    const handleReturnAmount=(event)=>{
+        setReturnAmount(event.target.value)
+         }
     return (
         <section>
             <h4 className='text-danger text-center'>
                 Add New Expiry
             </h4>
             <Row className='mt-1'>
-                <Col md={6} lg={5}>
+                <Col md={4} lg={4}>
                 <Form onChange={handleOutletSelect}>
                     <Form.Select>
                         <option value="">Select Outlet</option>
@@ -61,7 +64,7 @@ const AddNewExpiry = () => {
                     </Form.Select>
                 </Form>
                 </Col>
-                <Col md={6} lg={5}>
+                <Col md={4} lg={4}>
                     <Form onChange={handleDateChange}>
                             <Form.Group>
                                 <Form.Control type='date'>
@@ -70,8 +73,15 @@ const AddNewExpiry = () => {
                     </Form>
                 </Col>
                 
+                <Col md={2} lg={2}>
+                <Form onChange={handleReturnAmount}>
+                        <Form.Group>
+                            <Form.Control placeholder='ReturnAmount'/>
+                        </Form.Group>
+                </Form>
+            </Col>
             </Row>
-          <ExpiryForm productSubmited={productSubmited} setProductSubmited={setProductSubmited} selectedDate={selectedDate} selectedOutlet={selectedOutlet} allProducts={allProducts}/>
+          <ExpiryForm productSubmited={productSubmited} setProductSubmited={setProductSubmited} selectedDate={selectedDate} selectedOutlet={selectedOutlet} allProducts={allProducts} returnAmount={returnAmount}/>
            
         </section>
 

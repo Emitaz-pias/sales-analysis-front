@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 
-const DeliveryForm = ({ allProducts,selectedOutlet,selectedDate,setProductSubmited,productSubmited }) => {
+const DeliveryForm = ({ allProducts,selectedOutlet,selectedDate,setProductSubmited,productSubmited,deliveryAmount }) => {
   const [productQuantities, setProductQuantities] = useState({});
 
   const handleKeyPress = (e, index) => {
@@ -15,12 +15,15 @@ const DeliveryForm = ({ allProducts,selectedOutlet,selectedDate,setProductSubmit
     }
   
   }
+
   const handleQuantityChange = (productId, quantity) => {
     setProductQuantities((prevQuantities) => ({
       ...prevQuantities,
       [productId]: quantity,
     }));
   };
+
+  
 
   const handleSubmitDelivery = () => {
     // Combine product names and quantities into a single array of objects
@@ -33,7 +36,9 @@ const DeliveryForm = ({ allProducts,selectedOutlet,selectedDate,setProductSubmit
     const deliveryDetails ={
       outletName:selectedOutlet,
       deliveryDate:selectedDate,
-      deliveredProducts:productsWithQuantities
+      deliveredProducts:productsWithQuantities,
+      deliveryAmount:deliveryAmount
+      
     }
     axios
     .post(" http://localhost:4040/postNewDelivery", deliveryDetails)

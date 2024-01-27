@@ -12,6 +12,7 @@ const AddNewDelivery = () => {
     const [selectedOutlet, setSelectedOutlet] = useState('')
     const [selectedDate, setSelectedDate] = useState('')
     const [productSubmited, setProductSubmited] = useState(false)
+    const [deliveryAmount,setDeliveryAmount] =useState('')
 
     useEffect(() => {
         axios
@@ -43,6 +44,10 @@ const AddNewDelivery = () => {
     const handleDateChange = (e) =>{
         setSelectedDate(e.target.value)
     }
+ const handleDeliveryAmount=(event)=>{
+setDeliveryAmount(event.target.value)
+
+ }
 
     return (
         <section>
@@ -50,7 +55,7 @@ const AddNewDelivery = () => {
             Add New Delivery
         </h4>
         <Row className='mt-1'>
-            <Col md={6} lg={5}>
+            <Col md={5} lg={5}>
             <Form onChange={handleOutletSelect}>
                 <Form.Select>
                     <option value="">Select Outlet</option>
@@ -60,7 +65,7 @@ const AddNewDelivery = () => {
                 </Form.Select>
             </Form>
             </Col>
-            <Col md={6} lg={5}>
+            <Col md={4} lg={4}>
                 <Form onChange={handleDateChange}>
                         <Form.Group>
                             <Form.Control type='date'>
@@ -68,9 +73,16 @@ const AddNewDelivery = () => {
                         </Form.Group>
                 </Form>
             </Col>
+            <Col md={2} lg={2}>
+                <Form onChange={handleDeliveryAmount}>
+                        <Form.Group>
+                            <Form.Control placeholder='deliveryAmount'/>
+                        </Form.Group>
+                </Form>
+            </Col>
             
         </Row>
-       <DeliveryForm productSubmited={productSubmited} setProductSubmited={setProductSubmited} selectedDate={selectedDate} selectedOutlet={selectedOutlet} allProducts={allProducts}/>
+       <DeliveryForm productSubmited={productSubmited} setProductSubmited={setProductSubmited} selectedDate={selectedDate} selectedOutlet={selectedOutlet} allProducts={allProducts} deliveryAmount={deliveryAmount}/>
     </section>
     );
 };

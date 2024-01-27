@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 
-const ExpiryForm = ({ productSubmited,allProducts,selectedOutlet,selectedDate ,setProductSubmited}) => {
+const ExpiryForm = ({ productSubmited,allProducts,selectedOutlet,selectedDate ,setProductSubmited,returnAmount}) => {
   const [productQuantities, setProductQuantities] = useState({});
 
   const handleKeyPress = (e, index) => {
@@ -31,7 +31,8 @@ const ExpiryForm = ({ productSubmited,allProducts,selectedOutlet,selectedDate ,s
     const expiryDetails ={
       outletName:selectedOutlet,
       expiryDate:new Date(selectedDate),
-      expiredProducts:productsWithQuantities
+      expiredProducts:productsWithQuantities,
+      returnAmount:returnAmount
     }
     axios
     .post(" http://localhost:4040/postNewExpriry", expiryDetails)
@@ -82,7 +83,14 @@ const ExpiryForm = ({ productSubmited,allProducts,selectedOutlet,selectedDate ,s
               </tr>
             ))}
           </tbody>
+          <Form.Control
+                    id={`inputAmount`}
+                    type='number'
+                    min='0'
+                    placeholder='Return Amount In TK'              
+                  />
         </Table>
+        
         <Button onClick={handleSubmitExpiry}>Post To Database</Button>
       </Col>
     </Row>}
