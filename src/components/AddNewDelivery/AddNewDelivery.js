@@ -29,7 +29,7 @@ const AddNewDelivery = () => {
             .get(" http://localhost:4040/getAllProducts")
             .then((response) => {
                 setAllProducts(response.data)
-
+                
             })
             .catch((error) => {
                 console.error("Error gettin data:", error);

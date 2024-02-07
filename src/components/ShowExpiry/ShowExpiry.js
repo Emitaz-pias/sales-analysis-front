@@ -15,11 +15,15 @@ const ShowExpiry = () => {
   const [dateTo, setDateTo] = useState('')
   const [deliveryDates, setDeliveryDates] = useState([])
   const [expiryDates, setExpiryDates] = useState([])
-
+  const [totalDeliveryTk,setTotalDeliveryTk]=useState(0)
+  const [totalReturnTk,setTotalReturnTk] =useState(0)
+  const [percentageTk,setPercentageTk] = useState(0)
+  // console.log(totalDeliveryTk,totalReturnTk);
+  // console.log(percentageTk,'percentageTk');
   let [loading, setLoading] = useState(true);
   useEffect(() => {
     axios
-      .get(" http://localhost:4040/getAllOutlets")
+      .get("http://localhost:4040/getAllOutlets")
       .then((response) => {
         if (response.data) {
           setLoading(false)
@@ -35,6 +39,7 @@ const ShowExpiry = () => {
   const handleOutletSelect = (event) => {
     setSelectedOutlet(event.target.value)
   }
+
 
 
   // function calculateAverageDelivery(deliveryData, deliveryDates) {
@@ -83,10 +88,12 @@ const ShowExpiry = () => {
 
 
   //
+  
+  // call the submit button
   const onSubmit = (data) => {
     setDateFrom(data.dateFrom)
     setDateTo(data.dateTo)
-
+    setPercentageTk(amountPercentageCalculator(totalReturnTk,totalDeliveryTk))
     const expriyQuery = {
       outlet: selectedOutlet,
       dateFrom: new Date(data.dateFrom),
@@ -100,14 +107,45 @@ const ShowExpiry = () => {
         calculateExpiredPercentage(response.data.deliveryData, response.data.expiryData)
         setDeliveryDates(response.data.deliveryData)
         setExpiryDates(response.data.expiryData)
-
+        setTotalDeliveryTk(sumReturnAmount(response.data.deliveryData))
+        setTotalReturnTk(sumReturnAmount(response.data.expiryData))
       })
 
       .catch((error) => {
         console.error("Error getting data:", error);
       })
   };
+
+
   // calculation part
+  // money  percentage
+  function amountPercentageCalculator (totalReturnTk,totalDeliveryTk){
+    if(totalDeliveryTk&&totalReturnTk){
+    const percentage = (totalReturnTk/totalDeliveryTk)*100
+    const fixedPercentage=  percentage.toFixed(2)
+    return fixedPercentage
+  }
+}
+  
+// sum return and delivery amount in tk
+function sumReturnAmount(data) {
+  if ( data.length > 0) {
+    return data.reduce((total, item) => {
+      const amount = item.returnAmount || item.deliveryAmount;
+      if (amount !== undefined && amount !== null) {
+        return total + parseInt(amount);
+      } else {
+        // Handle invalid or missing amount data
+        return total;
+      }
+    }, 0);
+  } else {
+    // Handle empty or non-array data
+    return 0; // or any default value you prefer
+  }
+}
+
+
   function calculateExpiredPercentage(deliveryData, expiryData) {
     const productMap = new Map();
 
@@ -146,8 +184,7 @@ const ShowExpiry = () => {
     // Process expiryData
     expiryData.forEach((expiredProduct) => {
       const { expiredProducts } = expiredProduct;
-
-      expiredProducts.forEach((product) => {
+        expiredProducts.forEach((product) => {
         const { expiredQuantity } = product;
         updateProductData(product, parseInt(expiredQuantity, 10), true);
       });
@@ -244,6 +281,9 @@ const ShowExpiry = () => {
                 <th>Delivery To</th>
                 <th>Total Delivery</th>
                 <th>Total Expiry</th>
+                <th>Total Delivery Amount</th>
+                <th>Total Expiry Amount</th>
+                <th>Total Expired  %</th>
               </tr>
             </thead>
             <tbody>
@@ -253,7 +293,10 @@ const ShowExpiry = () => {
                 <td>{dateTo}</td>
                 <td>{deliveryDates.length}</td>
                 <td>{expiryDates.length}</td>
-              </tr>
+                <td>{totalDeliveryTk}</td>
+                <td>{totalReturnTk}</td> 
+                <td>{percentageTk}</td>
+                </tr>
             </tbody>
           </Table>}
 
@@ -266,7 +309,6 @@ const ShowExpiry = () => {
                   <th>Delivered Quantity</th>
                   <th>Expired Quantity</th>
                   <th>Expired Percentage</th>
-
                   <th>Current AVG Delivery</th>
                   <th>Projected Delivery</th>
 
