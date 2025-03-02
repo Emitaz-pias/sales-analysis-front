@@ -15,7 +15,7 @@ const Mysidebar = () => {
         <Sidebar
         rootStyles={{position: 'fixed',height: '100vh',width: '3vw',color: 'white'}}
          collapsed={collapsed}
-         backgroundColor={'#283618' }
+         backgroundColor={'#121212' }
          transitionDuration={600}>
          <Menu>
             <MenuItem   onClick={onCollapesd}>{collapsed? <FontAwesomeIcon  beatFade icon={faBars} color='pink'/>: <FontAwesomeIcon icon={faX } spin />}</MenuItem>
